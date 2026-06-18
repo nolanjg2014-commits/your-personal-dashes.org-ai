@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dash Chatbot</title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://pyscript.net/releases/2024.1.1/core.css" />
+    <script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+    <style>
+        body { font-family: sans-serif; max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        #chat-container { border: 1px solid #ccc; padding: 15px; border-radius: 8px; background-color: #f9f9f9; }
+        #chat-log { max-height: 400px; overflow-y: auto; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .message { margin-bottom: 5px; }
+        .user-message { text-align: right; color: blue; }
+        .bot-message { text-align: left; color: green; }
+        input[type="text"] { width: calc(100% - 70px); padding: 8px; margin-right: 5px; border: 1px solid #ccc; border-radius: 4px; }
+        button { padding: 8px 12px; background-color: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Dash Chatbot Assistant</h1>
+    <p>Welcome to your personal Dash's chat bot assistant. This is a shortcut to all the things on this dash.</p>
+
+    <div id="chat-container">
+        <div id="chat-log"></div>
+        <input type="text" id="user-input" placeholder="Type your command or 'exit'...">
+        <button id="send-button" py-click="send_message">Send</button>
+    </div>
+
+    <py-script>
+        from pyscript import document
+        from pyweb import pydom
+
+        chat_log = document.getElementById("chat-log")
+        user_input_element = document.getElementById("user-input")
+
+        def append_message(sender, message):
+            div = document.createElement("div")
+            div.className = f"message {sender}-message"
+            div.innerText = f"{sender.capitalize()}: {message}"
+            chat_log.appendChild(div)
+            chat_log.scrollTop = chat_log.scrollHeight # Auto-scroll
+
+        append_message("bot", "welcome to your personal dash's chat bot assistant what do you need from the dash")
+        append_message("bot", "this is a short cut to all the things on this dash")
+
+        links = {
+            "gouncover": "https://sites.google.com/view/backround47/home",
+            "gmail": "https://mail.google.com/",
+            "minecraft help": "https://docs.google.com/spreadsheets/d/e/2PACX-1vR5O3Oe6MsNTAhIySMcSEWkYBdqL7EDwTt3KghKSIXZWpRAhHhP81dr1cmIMSKPhek7SfXXl39ZLghW/pubhtml",
+            "canva": "https://canva.com/",
+            "youtube": "https://youtube.com/",
+            "discord": "https://discord.com/",
+            "dscord": "https://discord.com/", # handle typo
+            "geoseer": "https://geoseeer.com/",
+            "twitter": "https://twitter.com/",
+            "instagram": "https://instagram.com/",
+            "netflix": "https://netflix.com/",
+            "spotify": "https://spotify.com/",
+            "amazon": "https://amazon.com/",
+            "colab": "https://research.google.com/",
+            "gemini": "https://gemini.google.com/",
+            "calculator": "https://www.theonlinecalculator.com/",
+            "backround remover": "https://www.adobe.com/express/feature/image/remove-background",
+            "photopea": "https://photopea.com/",
+            "microsoft": "https://microsoft.com/",
+            "outlook": "https://outlook.com/",
+            "pyscript": "https://pyscript.com/",
+            "addictinggames": "https://addictinggames.com/",
+            "tiny fishing": "https://tiny-fishing.bitbucket.io/",
+            "geforce": "https://play.geforcenow.com/mall/",
+            "new tiny fishing": "https://bitlife-pro.github.io/",
+            "xbox": "https://xbox.com/",
+            "steam": "https://store.steampowered.com/",
+            "neal.fun": "https://neal.fun/",
+            "geofs": "https://geofs.com/",
+            "ztype": "https://ztype.com/",
+            "slow roads": "https://slowroads.io/",
+            "fps": "https://sites.google.com/view/yourpersonaldash/fps",
+            "dash": "https://www.sites.google.com/view/yourpersonaldash/acessgranted"
+        }
+
+        def send_message(*args, **kwargs):
+            user_to_bot = user_input_element.value.strip().lower()
+            if not user_to_bot:
+                return
+
+            append_message("user", user_to_bot)
+            user_input_element.value = ""
+
+            if user_to_bot == "exit":
+                append_message("bot", "Goodbye! (Refresh the page to start again)")
+                # Disable input after exit
+                user_input_element.disabled = True
+                document.getElementById("send-button").disabled = True
+            elif user_to_bot in links:
+                link = links[user_to_bot]
+                append_message("bot", f"<a href='{link}' target='_blank'>{link}</a> need anything else?")
+                # For security and usability, the link is displayed as clickable text
+            else:
+                append_message("bot", f"Sorry, I don't recognize '{user_to_bot}'. Please try again or type 'exit'.")
+
+        # Allow pressing Enter to send message
+        def handle_keypress(event):
+            if event.key == "Enter":
+                send_message()
+
+        user_input_element.addEventListener("keypress", handle_keypress)
+
+    </py-script>
+</body>
+</html>
